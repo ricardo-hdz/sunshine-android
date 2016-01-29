@@ -10,4 +10,12 @@
         android:inputType="text"
         android:singleLine="true" />
 
+
+    <ListPreference
+        android:key="@string/settings_temperature_key"
+        android:title="@string/settings_temperature_title"
+        android:defaultValue="@string/settings_temperature_default"
+        android:entries="@array/temperature_entries"
+        android:entryValues="@array/temperature_values"/>
+
 </PreferenceScreen>

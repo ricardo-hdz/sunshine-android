@@ -31,8 +31,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -62,9 +60,26 @@ public class ForecastFragment extends Fragment {
     }
 
     private void updateWeather() {
+        new FetchWeatherTask().execute(getLocation(), getUnitSetting());
+    }
+
+    private String getLocation() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        String locationSetting = settings.getString(getString(R.string.settings_key), getString(R.string.settings_default));
-        new FetchWeatherTask().execute(locationSetting);
+        return settings.getString(getString(R.string.settings_key), getString(R.string.settings_default));
+    }
+
+    private String getUnitSetting() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        return settings.getString(getString(R.string.settings_temperature_key), getString(R.string.settings_temperature_default));
+    }
+
+    private void displayLocationOnMap() {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = Uri.parse("geo:0,0?q=" + getLocation());
+        intent.setData(uri);
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -72,6 +87,9 @@ public class ForecastFragment extends Fragment {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
             updateWeather();
+            return true;
+        } else if (id == R.id.view_map_action) {
+            displayLocationOnMap();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -81,27 +99,11 @@ public class ForecastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        String[] stubData = {
-                "Today - Sunny - 88/63",
-                "Today - Sunny - 88/63",
-                "Today - Sunny - 88/63",
-                "Today - Sunny - 88/63",
-                "Today - Sunny - 88/63",
-                "Today - Sunny - 88/63",
-                "Today - Sunny - 88/63",
-                "Today - Sunny - 88/63",
-                "Today - Sunny - 88/63",
-                "Today - Sunny - 88/63",
-                "Today - Sunny - 88/63",
-                "Today - Sunny - 88/63"
-        };
-        List<String> weekForecast = new ArrayList<String>(Arrays.asList(stubData));
-
         adapter = new ArrayAdapter<String>(
                 getActivity(),
                 R.layout.list_item_forecast,
                 R.id.list_item_forecast_textview,
-                weekForecast
+                new ArrayList<String>()
         );
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -151,7 +153,7 @@ public class ForecastFragment extends Fragment {
                     .appendPath("forecast")
                     .appendPath("daily")
                     .appendQueryParameter("q", params[0])
-                    .appendQueryParameter("units", "metric")
+                    .appendQueryParameter("units", params[1])
                     .appendQueryParameter("cnt", "7")
                     .appendQueryParameter("APPID", "1325dd8440e750404e8993c87b3b7edd");
 

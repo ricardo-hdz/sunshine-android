@@ -18,6 +18,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
             // TODO: Add preferences from XML
             addPreferencesFromResource(R.xml.pref_general);
             bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_temperature_key)));
 
             // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
             // updated when the preference changes.
