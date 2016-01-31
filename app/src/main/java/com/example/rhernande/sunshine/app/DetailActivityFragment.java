@@ -13,7 +13,12 @@ import android.widget.TextView;
  */
 public class DetailActivityFragment extends Fragment {
 
+    private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
+    private static final String FORECAST_SHARE_STRING = "#SunshineApp";
+    private String mForecastStr;
+
     public DetailActivityFragment() {
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -22,11 +27,13 @@ public class DetailActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         Intent intent = getActivity().getIntent();
         if (intent != null && intent.hasExtra("weatherInfo")) {
-            String weatherInfo = intent.getStringExtra("weatherInfo");
+            mForecastStr = intent.getStringExtra("weatherInfo");
             TextView weatherInfoTextView = (TextView) rootView.findViewById(R.id.weatherInfoTextView);
-            weatherInfoTextView.setText(weatherInfo);
+            weatherInfoTextView.setText(mForecastStr);
         }
 
         return rootView;
     }
+
+
 }
