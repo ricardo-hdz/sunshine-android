@@ -122,6 +122,7 @@ public class ForecastFragment extends Fragment {
                 // Intent
                 Intent detailIntent = new Intent(getActivity().getApplicationContext(), DetailActivity.class);
                 detailIntent.putExtra("weatherInfo", weatherInfo);
+
                 startActivity(detailIntent);
             }
         });
