@@ -45,6 +45,10 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        
+        <provider
+            android:authorities="com.example.rhernande.sunshine.app"
+            android:name=".data.WeatherProvider" />
 
     </application>
 
